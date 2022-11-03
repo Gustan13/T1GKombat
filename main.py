@@ -20,8 +20,8 @@ clock = pygame.time.Clock()
 
 def main():
 
-    player_1 = player.player(0)
-    player_2 = player.player(1)
+    player_1 = player.player(0, (100, 0, 0))
+    player_2 = player.player(1, (0, 100, 0))
 
     hitboxes = []
 
@@ -40,8 +40,8 @@ def main():
         for i in hitboxes:
             i.update(hitboxes)
 
-        pygame.draw.rect(screen, (100,0,0), player_1.rect)
-        pygame.draw.rect(screen, (0,100,0), player_2.rect)
+        pygame.draw.rect(screen, player_1.color, player_1.rect)
+        pygame.draw.rect(screen, player_2.color, player_2.rect)
 
         for i in hitboxes:
             pygame.draw.rect(screen, (0,0,255), i.rect)
