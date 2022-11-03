@@ -5,7 +5,7 @@ pygame.init()
 class hitbox:
 
     def __init__(self, player, x, type):
-        self.timer = 30
+        self.timer = 5
         self.num = player
 
         if player == 0:
@@ -35,4 +35,4 @@ class hitbox:
 
         if self.timer <= 0:
             hitboxes.remove(self)
-            self.timer = 30
+            self.timer = 5

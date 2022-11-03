@@ -29,11 +29,11 @@ class player:
         self.life = 100
 
     def punch(self, hitboxes, type):
-        if self.hit_timer == 0:
+        if self.hit_timer == -10:
             hitboxes.append(hitbox(self.num, self.rect.right, type))
         
         self.canMove = False
-        if self.hit_timer <= -30:
+        if self.hit_timer <= -20:
             self.hit_timer = 0
             self.canMove = True
             self.punching = False
