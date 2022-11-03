@@ -1,6 +1,6 @@
 import pygame
 import os
-import player_1
+import player
 
 
 if not pygame.font:
@@ -13,14 +13,15 @@ data_dir = os.path.join(main_dir, "data")
 
 pygame.init()
 screen = pygame.display.set_mode((1000, 600), pygame.SCALED)
-pygame.display.set_caption("Mortal Kombat")
+pygame.display.set_caption("T1GKombat")
 pygame.mouse.set_visible(False)
 
 clock = pygame.time.Clock()
 
 def main():
 
-    player = player_1.player()
+    player_1 = player.player(0)
+    player_2 = player.player(1)
 
     hitboxes = []
 
@@ -33,12 +34,14 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        player.update(hitboxes)
+        player_1.update(hitboxes)
+        player_2.update(hitboxes)
 
         for i in hitboxes:
             i.update(hitboxes)
 
-        pygame.draw.rect(screen, (100,0,0), player.rect)
+        pygame.draw.rect(screen, (100,0,0), player_1.rect)
+        pygame.draw.rect(screen, (0,100,0), player_2.rect)
 
         for i in hitboxes:
             pygame.draw.rect(screen, (0,0,255), i.rect)

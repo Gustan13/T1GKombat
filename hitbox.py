@@ -15,17 +15,17 @@ class hitbox:
         if type == 0:
             self.size = 50
             self.y = 300
-            self.x = x
+            self.x = x - player*150
         
         elif type == 1:
             self.size = 50
             self.y = 450
-            self.x = x
+            self.x = x - player*150
 
         elif type == 2:
             self.size = 200
             self.y = 300
-            self.x = x
+            self.x = x - player*150
 
         self.rect = pygame.Rect(self.x, self.y, 50, self.size)
 
