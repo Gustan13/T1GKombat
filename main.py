@@ -1,7 +1,6 @@
 import pygame
 import os
 import player_1
-import hitbox
 
 
 if not pygame.font:
