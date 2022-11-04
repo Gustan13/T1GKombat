@@ -9,14 +9,28 @@ class player:
     def __init__(self, num, color):
         if (num == 0):
             self.rect = pygame.Rect(100,300,100,200)
+
+            self.high_punch = pygame.K_h
+            self.low_kick = pygame.K_j
+            self.heavy_attack = pygame.K_k
+            self.left = pygame.K_a
+            self.right = pygame.K_d
+
         else:
             self.rect = pygame.Rect(800,300,100,200)
+
+            self.high_punch = pygame.K_8
+            self.low_kick = pygame.K_9
+            self.heavy_attack = pygame.K_0
+            self.left = pygame.K_LEFT
+            self.right = pygame.K_RIGHT
 
         self.color = color
         self.default_color = color
 
         self.hit_timer = 0
         self.hurt_timer = 30
+        self.attack_cooldown = 15
 
         self.punching = False
         self.canMove = True
@@ -27,6 +41,7 @@ class player:
 
         self.hurt = False
         self.life = 100
+        self.punches_left = 3
 
     def punch(self, hitboxes, type):
         if self.hit_timer == -10:
@@ -37,9 +52,17 @@ class player:
             self.hit_timer = 0
             self.canMove = True
             self.punching = False
+            self.punches_left -= 1
+            self.attack_cooldown = 50
 
     def timer_update(self):
         self.hit_timer -= 1
+
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
+            return
+
+        self.punches_left = 3
 
     def move(self, x):
         self.rect = self.rect.move(x * 15, 0)
@@ -50,49 +73,55 @@ class player:
         if not self.canMove:
             return
     
-        if ((keys[pygame.K_h] and self.num == 0) or (keys[pygame.K_4] and self.num == 1)) and self.hit_timer <= 0:
+        if keys[self.left]:
+            self.dir = -1
+        elif keys[self.right]:
+            self.dir = 1
+        elif not keys[self.left] and not keys[self.right]:
+            self.dir = 0
+
+        if self.hit_timer > 0 or self.punches_left < 1:
+            return
+
+        if keys[self.high_punch]:
             self.punching = True
             self.hit_timer = 0
             self.type = 0
             self.canMove = False
         
-        elif ((keys[pygame.K_j] and self.num == 0) or (keys[pygame.K_5] and self.num == 1)) and self.hit_timer <= 0:
+        elif keys[self.low_kick]:
             self.punching = True
             self.hit_timer = 0
             self.type = 1
             self.canMove = False
-        elif ((keys[pygame.K_k] and self.num == 0) or (keys[pygame.K_6] and self.num == 1)) and self.hit_timer <= 0:
+
+        elif keys[self.heavy_attack]:
             self.punching = True
             self.hit_timer = 0
             self.type = 2
             self.canMove = False
-        
-        elif (keys[pygame.K_a] and self.num == 0) or (keys[pygame.K_LEFT] and self.num == 1):
-            self.dir = -1
-        elif (keys[pygame.K_d] and self.num == 0) or (keys[pygame.K_RIGHT] and self.num == 1):
-            self.dir = 1
-        elif (not keys[pygame.K_d] and not keys[pygame.K_a] and self.num == 0) or (not keys[pygame.K_LEFT] and not keys[pygame.K_RIGHT] and self.num == 1):
-            self.dir = 0
 
     def hit_check(self, hitboxes):
 
-        if self.hurt:
-            self.hurt_timer -= 1
-            if self.hurt_timer <= 0:
-                self.color = self.default_color
-                self.canMove = True
-                self.hurt_timer = 30
-                self.hurt = False
-            return
-
         for i in hitboxes:
-            
             if self.rect.colliderect(i.rect):
                 self.color = (255,255,255)
                 hitboxes.clear()
+
                 self.hurt = True
                 self.canMove = False
+                self.punching = False
+                self.hurt_timer = 30
+
+        if not self.hurt:
+            return
         
+        self.hurt_timer -= 1
+        if self.hurt_timer <= 0:
+            self.color = self.default_color
+            self.canMove = True
+            self.hurt = False
+
 
     def update(self, hitboxes):
         self.timer_update()
