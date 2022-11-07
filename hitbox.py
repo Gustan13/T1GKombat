@@ -7,6 +7,7 @@ class hitbox:
     def __init__(self, player, x, type):
         self.timer = 5
         self.num = player
+        self.type = type
 
         if player == 0:
             self.side = 0

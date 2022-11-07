@@ -46,7 +46,7 @@ def main():
         for i in hitboxes:
             pygame.draw.rect(screen, (0,0,255), i.rect)
 
-        clock.tick(60)
+        clock.tick(30)
         pygame.display.flip()
         screen.fill((0,0,0))
 
