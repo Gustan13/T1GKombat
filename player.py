@@ -1,4 +1,3 @@
-from cmath import rect
 import pygame
 from hitbox import *
 
@@ -45,7 +44,7 @@ class player:
 
         self.defending = -1
 
-        self.type = 0
+        self.attack_number = 0
         self.dir = 0
         self.num = num
 
@@ -61,12 +60,12 @@ class player:
             return
         self.punches_left = 3
 
-    def start_attack(self, type):
+    def start_attack(self, attack_number):
         self.punching = True
         self.hit_timer = 0
         self.canMove = False
 
-        self.type = type
+        self.attack_number = attack_number
 
     def end_attack(self):
         self.punching = False
@@ -76,12 +75,12 @@ class player:
         self.punches_left -= 1
         self.attack_cooldown = 50
 
-    def punch(self, hitboxes, type):
+    def punch(self, hitboxes, attack_number):
         if not self.punching:
             return
 
         if self.hit_timer == -10:
-            hitboxes.append(hitbox(self.num, self.rect.right, type))
+            hitboxes.append(hitbox(self.num, self.rect.right, attack_number))
         
         if self.hit_timer <= -20:
             self.end_attack()
@@ -121,19 +120,19 @@ class player:
         elif keys[self.heavy_attack]:
             self.start_attack(2)
 
-    def start_damage(self, type):
+    def start_damage(self, attack_number):
         self.color = (255,255,255)
         self.hurt = True
         self.canMove = False
         self.punching = False
 
-        if type != 2:
+        if attack_number != 2:
             self.hurt_timer = 30
             return
 
         self.hurt_timer = 5
 
-    def end_damage(self, type):
+    def end_damage(self, attack_number):
         self.hurt_timer -= 1
 
         if self.hurt_timer <= 0:
@@ -143,7 +142,7 @@ class player:
             self.dir = 0
             return
 
-        if type == 2:
+        if attack_number == 2:
             self.dir = self.num * 2 - 1
             self.move(self.dir * 3)
 
@@ -152,9 +151,9 @@ class player:
             if not self.rect.colliderect(i.rect):
                 continue
             
-            if self.defending != i.type:
-                self.start_damage(i.type)
-                self.hej = i.type
+            if self.defending != i.attack_number:
+                self.start_damage(i.attack_number)
+                self.hej = i.attack_number
                 break
 
         if not self.hurt:
@@ -167,7 +166,7 @@ class player:
         self.keyboard_check()
         self.hit_check(hitboxes)
 
-        self.punch(hitboxes, self.type)
+        self.punch(hitboxes, self.attack_number)
 
         if self.canMove:
             self.move(self.dir)
