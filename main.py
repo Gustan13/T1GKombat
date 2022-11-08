@@ -2,7 +2,6 @@ import pygame
 import os
 import player
 
-
 if not pygame.font:
     print("Warning, fonts disabled")
 if not pygame.mixer:

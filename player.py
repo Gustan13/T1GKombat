@@ -64,17 +64,22 @@ class player:
     def start_attack(self, type):
         self.punching = True
         self.hit_timer = 0
-        self.type = type
         self.canMove = False
 
+        self.type = type
+
     def end_attack(self):
+        self.punching = False
         self.hit_timer = 10
         self.canMove = True
-        self.punching = False
+
         self.punches_left -= 1
         self.attack_cooldown = 50
 
     def punch(self, hitboxes, type):
+        if not self.punching:
+            return
+
         if self.hit_timer == -10:
             hitboxes.append(hitbox(self.num, self.rect.right, type))
         
@@ -116,20 +121,31 @@ class player:
         elif keys[self.heavy_attack]:
             self.start_attack(2)
 
-    def start_damage(self):
+    def start_damage(self, type):
         self.color = (255,255,255)
         self.hurt = True
         self.canMove = False
         self.punching = False
-        self.hurt_timer = 30
 
-    def end_damage(self):
+        if type != 2:
+            self.hurt_timer = 30
+            return
+
+        self.hurt_timer = 5
+
+    def end_damage(self, type):
         self.hurt_timer -= 1
 
         if self.hurt_timer <= 0:
             self.color = self.default_color
             self.canMove = True
             self.hurt = False
+            self.dir = 0
+            return
+
+        if type == 2:
+            self.dir = self.num * 2 - 1
+            self.move(self.dir * 3)
 
     def hit_check(self, hitboxes):
         for i in hitboxes:
@@ -137,23 +153,22 @@ class player:
                 continue
             
             if self.defending != i.type:
-                self.start_damage()
+                self.start_damage(i.type)
+                self.hej = i.type
                 break
 
         if not self.hurt:
             return
         
-        self.end_damage()
-
+        self.end_damage(self.hej)
 
     def update(self, hitboxes):
         self.timer_update()
         self.keyboard_check()
         self.hit_check(hitboxes)
 
+        self.punch(hitboxes, self.type)
+
         if self.canMove:
             self.move(self.dir)
-
-        if self.punching:        
-            self.punch(hitboxes, self.type)
                 
