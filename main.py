@@ -19,13 +19,14 @@ clock = pygame.time.Clock()
 
 def main():
 
-    player_1 = player.player(0, (100, 0, 0))
-    player_2 = player.player(1, (0, 100, 0))
+    player_1 = player.player(0, (100, 0, 0), "binder")
+    player_2 = player.player(1, (0, 100, 0), "binder")
 
     hitboxes = []
 
     running = True
 
+    allsprites = pygame.sprite.RenderPlain((player_1))
 
     while running:
 
@@ -44,6 +45,8 @@ def main():
 
         for i in hitboxes:
             pygame.draw.rect(screen, (0,0,255), i.rect)
+
+        allsprites.draw(screen)
 
         clock.tick(30)
         pygame.display.flip()

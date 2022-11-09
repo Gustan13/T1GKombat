@@ -1,11 +1,15 @@
 import pygame
 from hitbox import *
+from image_loader import *
 
 pygame.init()
 
-class player:
+class player(pygame.sprite.Sprite):
 
-    def __init__(self, num, color):
+    def __init__(self, num, color, name):
+        pygame.sprite.Sprite.__init__(self)
+        self.name = name
+
         if (num == 0):
             self.rect = pygame.Rect(100,300,100,200)
 
@@ -51,6 +55,13 @@ class player:
         self.hurt = False
         self.life = 100
         self.punches_left = 3
+
+        self.animator = image_loader()
+
+        self.current_frame = 0
+        self.current_animation = []
+        self.current_animation = self.animator.load_images(1, "idle", "binder", self.current_animation)
+        self.image = self.current_animation[0]
 
     def timer_update(self):
         self.hit_timer -= 1
