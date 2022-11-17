@@ -54,8 +54,8 @@ class player(pygame.sprite.Sprite):
 
         self.hurt = False
         self.life = 100
+        self.power = 0
         self.punches_left = 3
-
         self.animator = image_loader()
 
         self.current_frame = 0
@@ -72,6 +72,11 @@ class player(pygame.sprite.Sprite):
         self.punches_left = 3
 
     def start_attack(self, attack_number):
+        if attack_number == 2 and self.power < 3:
+            return
+        elif attack_number == 2 and self.power >= 3:
+            self.power -= 3
+
         self.punching = True
         self.hit_timer = 0
         self.canMove = False
@@ -163,17 +168,24 @@ class player(pygame.sprite.Sprite):
             if not self.rect.colliderect(i.rect):
                 continue
             
-            if self.defending != i.attack_number and not self.hurt:
+            if self.hurt:
+                return
+
+            if self.defending != i.attack_number:
                 self.start_damage(i.attack_number)
                 self.hej = i.attack_number
                 break
+            else:
+                if self.power < 9:
+                    self.power += 1
+                    print(self.power)
 
         if not self.hurt:
             return
         
         self.end_damage(self.hej)
 
-    def update(self, hitboxes):
+    def update(self, screen, hitboxes):
         self.timer_update()
         self.keyboard_check()
         self.hit_check(hitboxes)
@@ -182,4 +194,6 @@ class player(pygame.sprite.Sprite):
 
         if self.canMove:
             self.move(self.dir)
+
+        pygame.draw.rect(screen, self.color, self.rect)
                 
