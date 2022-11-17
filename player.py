@@ -105,7 +105,7 @@ class player(pygame.sprite.Sprite):
     def move(self, x):
         self.rect = self.rect.move(x * 15, 0)
 
-    def keyboard_check(self):
+    def keyboard_check(self, min, max):
         keys = pygame.key.get_pressed()
 
         if not self.canMove:
@@ -119,9 +119,15 @@ class player(pygame.sprite.Sprite):
             self.defending = -1
 
         if keys[self.left]:
-            self.dir = -1
+            if self.rect.left > min:
+                self.dir = -1
+            else:
+                self.dir = 0
         elif keys[self.right]:
-            self.dir = 1
+            if self.rect.right < max:
+                self.dir = 1
+            else:
+                self.dir = 0
         elif not keys[self.left] and not keys[self.right]:
             self.dir = 0
 
@@ -184,9 +190,9 @@ class player(pygame.sprite.Sprite):
         
         self.end_damage(self.hej)
 
-    def update(self, screen, hitboxes):
+    def update(self, screen, hitboxes, min, max):
         self.timer_update()
-        self.keyboard_check()
+        self.keyboard_check(min, max)
         self.hit_check(hitboxes)
 
         self.punch(hitboxes, self.attack_number)

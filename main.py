@@ -42,12 +42,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        player_2.update(screen, hitboxes)
+        player_2.update(screen, hitboxes, player_1.rect.right, 1000)
 
         for i in hitboxes:
             i.update(screen, hitboxes)
 
-        player_1.update(screen, hitboxes)
+        player_1.update(screen, hitboxes, 0, player_2.rect.left)
 
         for i in hitboxes:
             i.update(screen, hitboxes)
@@ -64,8 +64,8 @@ def main():
         pygame.display.flip()
 
         screen.fill((0,0,0))
-        pygame.draw.rect(screen, (255,0,0), (50, 25, 425, 50))
-        pygame.draw.rect(screen, (255,0,0), (525, 25, 425, 50))
+        pygame.draw.rect(screen, (255,0,0), (50, 25, 425, 25))
+        pygame.draw.rect(screen, (255,0,0), (525, 25, 425, 25))
 
     pygame.quit()
 
