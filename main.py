@@ -1,6 +1,7 @@
 import pygame
 import os
 import player
+import health_bar
 
 if not pygame.font:
     print("Warning, fonts disabled")
@@ -21,6 +22,8 @@ def main():
 
     player_1 = player.player(0, (100, 0, 0), "binder")
     player_2 = player.player(1, (0, 100, 0), "binder")
+    health_bar_1 = health_bar.health_bar(player_1.num)
+    health_bar_2 = health_bar.health_bar(player_2.num)
 
     hitboxes = []
 
@@ -37,11 +40,20 @@ def main():
         player_1.update(hitboxes)
         player_2.update(hitboxes)
 
+        health_bar_1.update(player_1.num, player_1)
+        health_bar_2.update(player_2.num, player_2)
+
         for i in hitboxes:
             i.update(hitboxes)
 
         pygame.draw.rect(screen, player_1.color, player_1.rect)
         pygame.draw.rect(screen, player_2.color, player_2.rect)
+
+        pygame.draw.rect(screen, (255,0,0), (50, 25, 425, 50))
+        pygame.draw.rect(screen, (255,0,0), (525, 25, 425, 50))
+
+        pygame.draw.rect(screen, (0,255,0), health_bar_1.rect)
+        pygame.draw.rect(screen, (0,255,0), health_bar_2.rect)
 
         for i in hitboxes:
             pygame.draw.rect(screen, (0,0,255), i.rect)

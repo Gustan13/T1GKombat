@@ -132,6 +132,7 @@ class player(pygame.sprite.Sprite):
             self.start_attack(2)
 
     def start_damage(self, attack_number):
+        self.life -= 10
         self.color = (255,255,255)
         self.hurt = True
         self.canMove = False
@@ -162,7 +163,7 @@ class player(pygame.sprite.Sprite):
             if not self.rect.colliderect(i.rect):
                 continue
             
-            if self.defending != i.attack_number:
+            if self.defending != i.attack_number and not self.hurt:
                 self.start_damage(i.attack_number)
                 self.hej = i.attack_number
                 break
