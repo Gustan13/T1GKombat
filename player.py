@@ -54,8 +54,9 @@ class player(pygame.sprite.Sprite):
 
         self.hurt = False
         self.life = 100
-        self.power = 0
         self.punches_left = 3
+        self.power = 0
+
         self.animator = image_loader()
 
         self.current_frame = 0
@@ -137,7 +138,6 @@ class player(pygame.sprite.Sprite):
             self.start_attack(2)
 
     def start_damage(self, attack_number):
-        self.life -= 10
         self.color = (255,255,255)
         self.hurt = True
         self.canMove = False
@@ -150,6 +150,9 @@ class player(pygame.sprite.Sprite):
         self.hurt_timer = 5
 
     def end_damage(self, attack_number):
+        if (self.hurt_timer == 5 and attack_number == 2) or self.hurt_timer == 30:
+            self.life -= 10
+
         self.hurt_timer -= 1
 
         if self.hurt_timer <= 0:
@@ -167,9 +170,6 @@ class player(pygame.sprite.Sprite):
         for i in hitboxes:
             if not self.rect.colliderect(i.rect):
                 continue
-            
-            if self.hurt:
-                return
 
             if self.defending != i.attack_number:
                 self.start_damage(i.attack_number)
@@ -177,8 +177,7 @@ class player(pygame.sprite.Sprite):
                 break
             else:
                 if self.power < 9:
-                    self.power += 1
-                    print(self.power)
+                    self.power += 1 
 
         if not self.hurt:
             return

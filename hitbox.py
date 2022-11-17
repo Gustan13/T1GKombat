@@ -5,7 +5,7 @@ pygame.init()
 class hitbox:
 
     def __init__(self, player, x, type):
-        self.timer = 2
+        self.timer = 1
         self.num = player
         self.attack_number = type
 
@@ -31,10 +31,9 @@ class hitbox:
         self.x = x - player*150
 
     def update(self, screen, hitboxes):
+        pygame.draw.rect(screen, (0,0,255), self.rect)
         self.timer -= 1
 
-        if self.timer <= 0:
+        if self.timer < 0:
             hitboxes.remove(self)
-            self.timer = 2
-
-        pygame.draw.rect(screen, (0,0,255), self.rect)
+            self.timer = 1

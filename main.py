@@ -42,22 +42,27 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        player_1.update(screen, hitboxes)
         player_2.update(screen, hitboxes)
+
+        for i in hitboxes:
+            i.update(screen, hitboxes)
+
+        player_1.update(screen, hitboxes)
+
+        for i in hitboxes:
+            i.update(screen, hitboxes)
 
         health_bar_1.update(screen, player_1.num, player_1)
         health_bar_2.update(screen, player_2.num, player_2)
 
         power_bar_1.update(screen, player_1.num, player_1)
-        power_bar_2.update(screen, player_2.num, player_2)
-
-        for i in hitboxes:
-            i.update(screen, hitboxes)
+        power_bar_1.update(screen, player_2.num, player_2)
 
         allsprites.draw(screen)
 
         clock.tick(30)
         pygame.display.flip()
+
         screen.fill((0,0,0))
         pygame.draw.rect(screen, (255,0,0), (50, 25, 425, 50))
         pygame.draw.rect(screen, (255,0,0), (525, 25, 425, 50))
